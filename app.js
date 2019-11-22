@@ -1,52 +1,68 @@
-var activePlayersID = 0;
+var activePlayer = 0;
+var scores = [0, 0];
+var roundScore = 0;
+var isOver = true;
 
-function btnClickNew() {
+document.querySelector(".btn-new").addEventListener("click", function() {
   document.getElementById("score-0").textContent = 0;
   document.getElementById("score-1").textContent = 0;
   document.getElementById("current-0").textContent = 0;
   document.getElementById("current-1").textContent = 0;
-  document.getElementById("btnRoll").disabled = false;
-  document.getElementById("btnHold").disabled = false;
-  document.getElementById("name-" + activePlayersID).textContent =
-    "PLAYER " + (activePlayersID + 1);
-}
+  isOver = false;
+});
 
-function btnClickRoll(ID) {
-  Roll(activePlayersID);
-}
+// window.document.querySelector("#score-0").textContent = dice;
+var diceDOM = document.querySelector(".dice");
 
-function Roll(ID) {
-  var i = Math.floor(Math.random() * 6 + 1);
-  document.getElementById("dicePic").src = "dice-" + i + ".png";
-  if (i > 1) {
-    document.getElementById("score-" + ID).textContent =
-      Number(document.getElementById("score-" + ID).textContent) + i;
-  } else {
-    document.getElementById("score-" + ID).textContent = 0;
-    changeActiveStatus();
-  }
-}
+diceDOM.style.display = "none";
 
-function btnClickHold() {
-  Hold(activePlayersID);
-}
+// Шоог шидэх эвент листенер
+document.querySelector(".btn-roll").addEventListener("click", function() {
+  if (!isOver) {
+    var diceNumber = Math.floor(Math.random() * 6 + 1); // get random number (1-6)
+    diceDOM.style.display = "block";
+    diceDOM.src = "dice-" + diceNumber + ".png";
+    // console.log(Math.floor(Math.random() * 6 + 1));
+    if (diceNumber !== 1) {
+      roundScore = roundScore + diceNumber;
+      document.getElementById(
+        "current-" + activePlayer
+      ).textContent = roundScore;
+    } else {
+      roundScore = 0;
+      document.getElementById(
+        "current-" + activePlayer
+      ).textContent = roundScore;
+      switchPlayer();
+      diceDOM.style.display = "none";
+    }
+  } else alert("Game is over! \nPress NEW GAME");
+});
 
-function Hold(ID) {
-  document.getElementById("current-" + ID).textContent =
-    Number(document.getElementById("current-" + ID).textContent) +
-    Number(document.getElementById("score-" + ID).textContent);
-  if (Number(document.getElementById("current-" + ID).textContent) >= 100) {
-    document.getElementById("name-" + ID).textContent = "WINNER!";
-    document.getElementById("btnRoll").disabled = true;
-    document.getElementById("btnHold").disabled = true;
-  } else changeActiveStatus();
-}
+//HOLD
+document.querySelector(".btn-hold").addEventListener("click", function() {
+  if (!isOver) {
+    scores[activePlayer] = scores[activePlayer] + roundScore;
+    document.getElementById("score-" + activePlayer).textContent =
+      scores[activePlayer];
 
-function changeActiveStatus() {
-  document.getElementById("score-" + activePlayersID).textContent = 0;
-  document
-    .getElementById("player" + activePlayersID)
-    .classList.remove("active");
-  activePlayersID == 1 ? (activePlayersID = 0) : (activePlayersID = 1);
-  document.getElementById("player" + activePlayersID).classList.add("active");
+    if (scores[activePlayer] >= 100) {
+      document.getElementById("name-" + activePlayer).textContent = "Winner!";
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.add("winner");
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.remove("active");
+      isOver = true;
+    } else switchPlayer();
+    roundScore = 0;
+  } else alert("Game is over! \nPress NEW GAME");
+});
+
+function switchPlayer() {
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  diceDOM.style.display = "none";
 }
