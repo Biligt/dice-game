@@ -2,6 +2,7 @@ var activePlayer = 0;
 var scores = [0, 0];
 var roundScore = 0;
 var isOver = true;
+newGame();
 
 function newGame() {
   document.getElementById("score-0").textContent = 0;
@@ -47,6 +48,8 @@ document.querySelector(".btn-hold").addEventListener("click", function() {
     document.getElementById("score-" + activePlayer).textContent =
       scores[activePlayer];
 
+    roundScore = 0;
+    document.getElementById("current-" + activePlayer).textContent = roundScore;
     if (scores[activePlayer] >= 100) {
       document.getElementById("name-" + activePlayer).textContent = "Winner!";
       document
@@ -57,8 +60,6 @@ document.querySelector(".btn-hold").addEventListener("click", function() {
         .classList.remove("active");
       isOver = true;
     } else switchPlayer();
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else alert("Game is over! \nPress NEW GAME");
 });
 
