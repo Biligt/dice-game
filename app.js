@@ -3,13 +3,14 @@ var scores = [0, 0];
 var roundScore = 0;
 var isOver = true;
 
-document.querySelector(".btn-new").addEventListener("click", function() {
+function newGame() {
   document.getElementById("score-0").textContent = 0;
   document.getElementById("score-1").textContent = 0;
   document.getElementById("current-0").textContent = 0;
   document.getElementById("current-1").textContent = 0;
   isOver = false;
-});
+}
+document.querySelector(".btn-new").addEventListener("click", newGame);
 
 // window.document.querySelector("#score-0").textContent = dice;
 var diceDOM = document.querySelector(".dice");
