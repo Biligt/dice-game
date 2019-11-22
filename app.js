@@ -57,6 +57,7 @@ document.querySelector(".btn-hold").addEventListener("click", function() {
         .classList.remove("active");
       isOver = true;
     } else switchPlayer();
+    document.getElementById("current-" + activePlayer).textContent = roundScore;
     roundScore = 0;
   } else alert("Game is over! \nPress NEW GAME");
 });
